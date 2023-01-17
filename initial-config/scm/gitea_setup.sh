@@ -5,8 +5,8 @@ docker-compose -f /shared/scm/docker-compose.yml up -d
 
 # Wait until ready
 while true; do 
-  echo 'Trying to connect to http://192.168.99.101:3000 ...'; 
-  if [ $(curl -s -o /dev/null -w "%{http_code}" http://192.168.99.101:3000) == "200" ]; then 
+  echo 'Trying to connect to http://192.168.99.102:3000 ...'; 
+  if [ $(curl -s -o /dev/null -w "%{http_code}" http://192.168.99.102:3000) == "200" ]; then 
     echo '... connected.'; 
     break; 
   else 
@@ -30,10 +30,10 @@ echo "Modified on $(date '+%Y-%m-%d %H:%M:%S')" >> /tmp/bgapp/README.md
 cd /tmp/bgapp && git add . && git commit -m "Modified on $(date '+%Y-%m-%d %H:%M:%S')"
 
 # Add it to Gitea (but as public repository)
-cd /tmp/bgapp && git push -o repo.private=false http://merev:merev@192.168.99.101:3000/merev/bgapp
+cd /tmp/bgapp && git push -o repo.private=false http://merev:merev@192.168.99.102:3000/merev/bgapp
 
 # Add a Webhook
-curl -X 'POST' 'http://192.168.99.101:3000/api/v1/repos/merev/bgapp/hooks' \
+curl -X 'POST' 'http://192.168.99.102:3000/api/v1/repos/merev/bgapp/hooks' \
   -H 'accept: application/json' \
   -H 'authorization: Basic '$(echo -n 'merev:merev' | base64) \
   -H 'Content-Type: application/json' \
@@ -42,7 +42,7 @@ curl -X 'POST' 'http://192.168.99.101:3000/api/v1/repos/merev/bgapp/hooks' \
   "branch_filter": "*",
   "config": {
     "content_type": "json",
-    "url": "http://192.168.99.102:8080/gitea-webhook/post",
+    "url": "http://192.168.99.101:8080/gitea-webhook/post",
     "http_method": "post"
   },
   "events": [

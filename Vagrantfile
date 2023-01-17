@@ -22,29 +22,29 @@ Vagrant.configure("2") do |config|
     ans.vm.provision "shell", path: "initial-config/terraform/terraform_setup.sh"
   end
 
+  # Jenkins Host - Debian 11
+  config.vm.define "jenkins" do |jenkins|
+    jenkins.vm.box = "merev/debian-11"
+    jenkins.vm.hostname = "jenkins"
+    jenkins.vm.network "private_network", ip: "192.168.99.101"
+    jenkins.vm.synced_folder "shared/", "/shared"
+    jenkins.vm.provision "shell", path: "initial-config/add_hosts.sh"
+    jenkins.vm.provision "shell", path: "initial-config/ansible/ansible_debian_client.sh"
+    jenkins.vm.provision "shell", path: "initial-config/monitoring/node_exp_setup.sh"
+    jenkins.vm.provision "shell", path: "initial-config/jenkins/jenkins_setup.sh"
+  end
+
   # Source Control Management (docker host) - Debian 11
   config.vm.define "scm" do |scm|
     scm.vm.box = "merev/debian-11"
     scm.vm.hostname = "scm"
-    scm.vm.network "private_network", ip: "192.168.99.101"
+    scm.vm.network "private_network", ip: "192.168.99.102"
     scm.vm.synced_folder "shared/", "/shared"
     scm.vm.provision "shell", path: "initial-config/add_hosts.sh"
     scm.vm.provision "shell", path: "initial-config/ansible/ansible_debian_client.sh"
     scm.vm.provision "shell", path: "initial-config/monitoring/node_exp_setup.sh"
     scm.vm.provision "shell", path: "initial-config/docker/docker_setup.sh"
     scm.vm.provision "shell", path: "initial-config/scm/gitea_setup.sh"
-  end
-
-  # Jenkins Host - Debian 11
-  config.vm.define "jenkins" do |jenkins|
-    jenkins.vm.box = "merev/debian-11"
-    jenkins.vm.hostname = "jenkins"
-    jenkins.vm.network "private_network", ip: "192.168.99.102"
-    jenkins.vm.synced_folder "shared/", "/shared"
-    jenkins.vm.provision "shell", path: "initial-config/add_hosts.sh"
-    jenkins.vm.provision "shell", path: "initial-config/ansible/ansible_debian_client.sh"
-    jenkins.vm.provision "shell", path: "initial-config/monitoring/node_exp_setup.sh"
-    jenkins.vm.provision "shell", path: "initial-config/jenkins/jenkins_setup.sh"
   end
 
   # Apache Kafka Machine (docker host) - Debian 11

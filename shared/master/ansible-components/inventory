@@ -1,5 +1,5 @@
-scm ansible_host=192.168.99.101
-jenkins ansible_host=192.168.99.102
+jenkins ansible_host=192.168.99.101
+scm ansible_host=192.168.99.102
 kafka ansible_host=192.168.99.103
 monitoring ansible_host=192.168.99.104
 apps ansible_host=192.168.99.105

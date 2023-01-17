@@ -11,11 +11,11 @@ scrape_configs:
     static_configs:
     - targets: ['192.168.99.100:9100']
 
-  - job_name: 'gitea'
+  - job_name: 'jenkins'
     static_configs:
     - targets: ['192.168.99.101:9100']
 
-  - job_name: 'jenkins'
+  - job_name: 'scm'
     static_configs:
     - targets: ['192.168.99.102:9100']
     
