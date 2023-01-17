@@ -30,7 +30,7 @@ echo "Modified on $(date '+%Y-%m-%d %H:%M:%S')" >> /tmp/bgapp/README.md
 cd /tmp/bgapp && git add . && git commit -m "Modified on $(date '+%Y-%m-%d %H:%M:%S')"
 
 # Add it to Gitea (but as public repository)
-cd /tmp/bgapp && git push -o repo.private=false http://vagrant:vagrant@192.168.99.101:3000/merev/bgapp
+cd /tmp/bgapp && git push -o repo.private=false http://merev:merev@192.168.99.101:3000/merev/bgapp
 
 # Add a Webhook
 curl -X 'POST' 'http://192.168.99.101:3000/api/v1/repos/merev/bgapp/hooks' \
