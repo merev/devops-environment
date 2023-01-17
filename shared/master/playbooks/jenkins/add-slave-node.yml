@@ -4,6 +4,5 @@
   tasks:
     
     -  name: Add slave node through a BASH script
-       ansible.builtin.shell: add-jenkins-slave.sh "{{ nodename }}" "{{ credid }}" "{{ label }}"
-       args:
-         chdir: /shared/jenkins/
+       ansible.builtin.shell:
+         cmd: /shared/jenkins/add-jenkins-slave.sh "{{ nodename }}" "{{ credid }}" "{{ label }}"
