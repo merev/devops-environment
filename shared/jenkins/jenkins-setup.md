@@ -13,7 +13,7 @@ Example command:
 
     sudo ansible-playbook jenkins/ssh-key-gen.yml
 
-3.) Add SSH username with private key credential from the UI (use the key that was exported in `/shraed/jenkins/ssh-keys/id_rsa`).
+3.) Add SSH username with private key credential from the UI (use the key that was exported in `/shared/jenkins/ssh-keys/id_rsa`).
 
 Refference - https://www.jenkins.io/doc/book/using/using-credentials/
 
