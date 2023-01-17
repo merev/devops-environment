@@ -1,0 +1,23 @@
+version: '3'
+services:
+  facts-producer:
+  # producer facts to demo2 topic (can be adjusted through an environment variable)
+    image: merev/kafka-producer:facts
+    container_name: facts-producer
+    networks:
+      - kafka-net
+    environment:
+      BROKER: broker:29092 # default value  = localhost:9092
+      TOPIC: demo2 # default value  = demo
+  facts-consumer:
+  # consumes facts from demo2 topic (can be adjusted through an environment variable)
+    image: merev/kafka-consumer:facts
+    container_name: facts-consumer
+    networks:
+      - kafka-net
+    environment:
+      BROKER: broker:29092 # default value  = localhost:9092
+      TOPIC: demo2 # default value  = demo
+networks:
+  kafka-net:
+    name: kafka-net

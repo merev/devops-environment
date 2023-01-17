@@ -1,0 +1,17 @@
+version: '3'
+services:
+  numbers-producer:
+  # produces numbers to demo topic (can be adjusted in the application code)
+    image: merev/kafka-producer:numbers
+    container_name: numbers-producer
+    networks:
+      - kafka-net
+  numbers-consumer:
+  # consumes numbers from demo topic (can be adjusted in the application code)
+    image: merev/kafka-consumer:numbers
+    container_name: numbers-consumer
+    networks:
+      - kafka-net
+networks:
+  kafka-net:
+    name: kafka-net

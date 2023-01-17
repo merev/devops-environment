@@ -1,0 +1,82 @@
+---
+- hosts: web
+  become: true
+
+  tasks:
+    - name: Install PHP packets
+      dnf: name=php,php-mysqlnd state=present
+
+    - name: Install Apache HTTP Server on Red Hat
+      dnf: name=httpd state=present
+      when: ansible_os_family == "RedHat"
+
+    - name: Start Apache HTTP Server and Enable it on Red Hat
+      service: name=httpd state=started enabled=true
+      when: ansible_os_family == "RedHat"
+
+    - name: Red Hat - Open HTTP Port in the Firewall
+      firewalld:
+        port: 80/tcp
+        permanent: true
+        state: enabled
+        immediate: true
+      when: ansible_os_family == "RedHat"
+
+    - name: Install Apache HTTP Server on Debian
+      apt: name=apache2 state=present
+      when: ansible_os_family == "Debian"
+
+    - name: Start Apache HTTP Server and Enable it on Debian
+      service: name=apache2 state=started enabled=true
+      when: ansible_os_family == "Debian"
+
+    - name: Debian - Open HTTP Port in the Firewall
+      ufw: 
+        rule: allow
+        port: 80
+        proto: tcp
+      when: ansible_os_family == "Debian"
+
+    - name: Copy the web content
+      copy: src=bgapp-data/web/ dest=/var/www/html/
+
+
+
+- hosts: db
+  become: true
+  
+  tasks:
+    - name: Install MariaDB
+      dnf:
+        name: mariadb-server
+        state: present
+
+    - name: Start and enable MariaDB
+      service: name=mariadb state=started enabled=true        
+
+    - name: Adjust MariaDB connectivity
+      ansible.builtin.command: sudo sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/my.cnf.d/mariadb-server.cnf
+
+    - name: Restart MariaDB
+      ansible.builtin.command: sudo systemctl restart mariadb
+
+    - name: Copy the db setup file
+      copy: src=bgapp-data/db/ dest=/tmp/
+
+    - name: Load the DB
+      ansible.builtin.shell: sudo mysql -u root < /tmp/db_setup.sql
+
+    - name: Red Hat - Open HTTP Port in the Firewall
+      firewalld:
+        port: 3306/tcp
+        permanent: true
+        state: enabled
+        immediate: true
+      when: ansible_os_family == "RedHat"
+
+    - name: Debian - Open HTTP Port in the Firewall
+      ufw: 
+        rule: allow
+        port: 3306
+        proto: tcp
+      when: ansible_os_family == "Debian"

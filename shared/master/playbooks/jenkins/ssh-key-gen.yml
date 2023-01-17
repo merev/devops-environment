@@ -1,0 +1,23 @@
+---
+- hosts: jenkins
+  become: true
+  tasks:
+
+    - name: Create a 2048-bit SSH key for user jenkins in ~jenkins/.ssh/id_rsa
+      ansible.builtin.user:
+        name: jenkins
+        generate_ssh_key: yes
+        ssh_key_bits: 2048
+        ssh_key_file: .ssh/id_rsa
+
+    - name: Copy the private key in a shared file
+      ansible.builtin.copy:
+        remote_src: true
+        src: /var/lib/jenkins/.ssh/id_rsa
+        dest: /shared/jenkins/ssh-keys/id_rsa
+
+    - name: Copy the public key in a shared file
+      ansible.builtin.copy:
+        remote_src: true
+        src: /var/lib/jenkins/.ssh/id_rsa.pub
+        dest: /shared/jenkins/ssh-keys/id_rsa.pub

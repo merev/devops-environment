@@ -1,0 +1,54 @@
+---
+- hosts: docker
+  tasks:
+
+    - name: Instal docker module
+      ansible.builtin.command: sudo pip3 install docker
+
+#    - name: Clone bgapp project
+#      ansible.builtin.git:
+#        repo: https://github.com/merev/bgapp.git
+#        dest: ./
+#        
+#    - name: Build web image
+#      community.docker.docker_image:
+#        build:
+#          path: bgapp/Dockerfile.web
+#        name: bgapp-web
+#    
+#    - name: Build db image
+#      community.docker.docker_image:
+#        build:
+#          path: bgapp/Dockerfile.db
+#        name: bgapp-db
+
+#    - name: Create a volume for the web Container
+#      community.docker.docker_volume:
+#        name: bgapp-web-vol
+
+    - name: Create a network for bgapp
+      community.docker.docker_network:
+        name: bgapp-net
+
+    - name: Run Web Container
+      community.docker.docker_container:
+        name: web
+        image: naskodlg/bgapp-web:ansible
+        ports:
+          -  "8080:80"
+        networks:
+          - name: bgapp-net
+#        volumes:
+#          - bgapp-web-vol:/var/www/html
+          
+    - name: Run Db Container
+      community.docker.docker_container:
+        name: db
+        image: naskodlg/bgapp-db:ansible
+        networks:
+          - name: bgapp-net
+        env:
+          MYSQL_ROOT_PASSWORD: "12345"          
+        
+
+

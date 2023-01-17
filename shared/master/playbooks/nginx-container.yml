@@ -1,0 +1,13 @@
+---
+- hosts: docker
+  tasks:
+
+    - name: Instal docker module
+      ansible.builtin.command: sudo pip3 install docker
+
+    - name: Run NGINX Container
+      community.docker.docker_container:
+        name: ansible-nginx
+        image: nginx:latest
+        ports:
+          -  "8000:80"

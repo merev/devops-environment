@@ -1,0 +1,30 @@
+---
+- hosts: docker
+  become: true
+  tasks:
+
+    - name: Add the user 'jenkins' with a bash shell, home dir, and password. Append the group 'docker' to the user's groups
+      ansible.builtin.user:
+        name: jenkins
+        shell: /bin/bash
+        groups: docker
+        password: "{{ password|password_hash('sha512') }}"
+        home: /home/jenkins
+
+    - name: Give the user sudo permissions
+      ansible.builtin.shell:
+        cmd: echo "jenkins ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/jenkins
+
+    - name: Create .ssh folder in the home dir of the user
+      ansible.builtin.shell:
+        cmd: mkdir /home/jenkins/.ssh
+
+    - name: Provide the public key for the jenkins user
+      ansible.builtin.copy:
+        remote_src: true
+        src: /shared/jenkins/ssh-keys/id_rsa.pub
+        dest: /home/jenkins/.ssh/authorized_keys
+
+    - name: Adjust the permissions
+      ansible.builtin.shell:
+        cmd: chown -R jenkins:jenkins /home/jenkins

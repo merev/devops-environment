@@ -1,0 +1,6 @@
+127.0.0.1 localhost
+::1 localhost
+
+192.168.99.100 ansible
+192.168.99.101 jenkins
+192.168.99.102 docker
