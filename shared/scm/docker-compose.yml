@@ -24,7 +24,7 @@ services:
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
       - GITEA__database__PASSWD=gitea
-      - GITEA__webhook__ALLOWED_HOST_LIST = 192.168.99.0/24
+      - GITEA__webhook__ALLOWED_HOST_LIST=192.168.99.0/24
       - GITEA__security__INSTALL_LOCK=true
       - GITEA__repository__ENABLE_PUSH_CREATE_USER=true
       - GITEA__repository__ENABLE_PUSH_CREATE_ORG=true
