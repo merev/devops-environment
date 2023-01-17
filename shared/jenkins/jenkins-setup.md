@@ -31,8 +31,8 @@ Apply the following ansible playbook - ***jenkins/add-slave-node.yml*** (you sho
 
 Command:
 
-    sudo ansible-playbook jenkins/create-jenkins-user.yml --extra-vars nodename=<node hostname> --extra-vars credid=<credential ID> --extra-vars label=<node label>
+    sudo ansible-playbook jenkins/add-slave-node.yml --extra-vars nodename=<node hostname> --extra-vars credid=<credential ID> --extra-vars label=<node label>
 
 Example:
 
-    sudo ansible-playbook jenkins/create-jenkins-user.yml --extra-vars nodename=docker --extra-vars credid=jenkins --extra-vars label=docker
+    sudo ansible-playbook jenkins/add-slave-node.yml --extra-vars nodename=docker --extra-vars credid=jenkins --extra-vars label=docker
