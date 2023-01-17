@@ -35,4 +35,4 @@ echo "* Restart Jenkins"
 systemctl restart jenkins
 
 echo "* Download Jenkins CLI"
-wget http://192.168.99.101:8080/jnlpJars/jenkins-cli.jar
+wget http://192.168.99.102:8080/jnlpJars/jenkins-cli.jar

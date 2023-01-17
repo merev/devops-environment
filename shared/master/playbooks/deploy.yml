@@ -1,0 +1,113 @@
+---
+- hosts: web
+  become: true
+
+  tasks:
+
+    - name: "Update Repository cache"
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
+
+    - name: Install PHP packets
+      apt: name=php,php-mysqlnd state=present
+
+    - name: Install Apache HTTP Server on Red Hat
+      apt: name=httpd state=present
+      when: ansible_os_family == "RedHat"
+
+    - name: Start Apache HTTP Server and Enable it on Red Hat
+      service: name=httpd state=started enabled=true
+      when: ansible_os_family == "RedHat"
+
+    - name: Red Hat - Open HTTP Port in the Firewall
+      firewalld:
+        port: 80/tcp
+        permanent: true
+        state: enabled
+        immediate: true
+      when: ansible_os_family == "RedHat"
+
+    - name: Install Apache HTTP Server on Debian
+      apt: name=apache2 state=present
+      when: ansible_os_family == "Debian"
+
+    - name: Start Apache HTTP Server and Enable it on Debian
+      service: name=apache2 state=started enabled=true
+      when: ansible_os_family == "Debian"
+
+    - name: Remove default html dir
+      ansible.builtin.file:
+        path: /var/www/html
+        state: absent
+
+    - name: Create a directory for First app
+      ansible.builtin.file:
+        path: /var/www/app1
+        state: directory
+        mode: '0755'
+
+    - name: Create a directory for Second app
+      ansible.builtin.file:
+        path: /var/www/app2
+        state: directory
+        mode: '0755'
+
+    - name: Remove file default apache conf file
+      ansible.builtin.file:
+        path: /etc/apache2/sites-available/000-default.conf
+        state: absent
+
+    - name: Copy the apache conf file
+      copy: src=web/000-default.conf  dest=/etc/apache2/sites-available/000-default.conf  
+
+    - name: Copy the files for First app
+      copy: src=web/app1/  dest=/var/www/app1/
+
+    - name: Copy the files for Second app.
+      copy: src=web/app2/  dest=/var/www/app2/
+
+    - name: Restart apache2
+      ansible.builtin.command: systemctl restart apache2              
+
+
+
+- hosts: db
+  become: true
+  
+  tasks:
+
+    - name: "Update Repository cache"
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
+
+    - name: Install MariaDB
+      apt:
+        name: mariadb-server
+        state: present
+
+    - name: Start and enable MariaDB
+      service: name=mariadb state=started enabled=true        
+
+    - name: Adjust MariaDB connectivity
+      ansible.builtin.command: sudo sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/mysql/mariadb.conf.d/50-server.cnf
+
+    - name: Restart MariaDB
+      ansible.builtin.command: sudo systemctl restart mariadb
+
+    - name: Copy the db setup file
+      copy: src=db/ dest=/tmp/
+
+    - name: Load the DB
+      ansible.builtin.shell: sudo mysql -u root < /tmp/db_setup.sql
+
+    - name: Red Hat - Open HTTP Port in the Firewall
+      firewalld:
+        port: 3306/tcp
+        permanent: true
+        state: enabled
+        immediate: true
+      when: ansible_os_family == "RedHat"
