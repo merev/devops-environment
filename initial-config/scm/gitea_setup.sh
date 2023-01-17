@@ -42,7 +42,7 @@ curl -X 'POST' 'http://192.168.99.101:3000/api/v1/repos/merev/bgapp/hooks' \
   "branch_filter": "*",
   "config": {
     "content_type": "json",
-    "url": "http://192.168.99.102:8080/gitea-webhook/post",
+    "url": "http://192.168.99.101:8080/gitea-webhook/post",
     "http_method": "post"
   },
   "events": [
