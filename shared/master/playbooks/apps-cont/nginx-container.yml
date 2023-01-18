@@ -1,5 +1,5 @@
 ---
-- hosts: docker
+- hosts: apps
   tasks:
 
     - name: Instal docker module

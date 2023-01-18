@@ -4,14 +4,9 @@
 
   tasks:
 
-    - name: "Update Repository cache"
-      apt:
-        update_cache: true
-        cache_valid_time: 3600
-        force_apt_get: true
-
-    - name: Install PHP packets
-      apt: name=php,php-mysqlnd state=present
+    - name: Install PHP packets on RedHat
+      dnf: name=php,php-mysqlnd state=present
+      when: ansible_os_family == "RedHat"
 
     - name: Install Apache HTTP Server on Red Hat
       apt: name=httpd state=present
@@ -28,6 +23,10 @@
         state: enabled
         immediate: true
       when: ansible_os_family == "RedHat"
+
+    - name: Install PHP packets on Debian
+      apt: name=php,php-mysqlnd,ufw state=present update_cache=true
+      when: ansible_os_family == "Debian"
 
     - name: Install Apache HTTP Server on Debian
       apt: name=apache2 state=present
@@ -60,49 +59,60 @@
         state: absent
 
     - name: Copy the apache conf file
-      copy: src=web/000-default.conf  dest=/etc/apache2/sites-available/000-default.conf  
+      copy: src=apps-data/app2-data/web/000-default.conf  dest=/etc/apache2/sites-available/000-default.conf  
 
     - name: Copy the files for First app
-      copy: src=web/app1/  dest=/var/www/app1/
+      copy: src=apps-data/app2-data/web/app1/  dest=/var/www/app1/
 
     - name: Copy the files for Second app.
-      copy: src=web/app2/  dest=/var/www/app2/
+      copy: src=apps-data/app2-data/web/app2/  dest=/var/www/app2/
 
-    - name: Restart apache2
-      ansible.builtin.command: systemctl restart apache2              
+    - name: Restart Apache on Debian
+      ansible.builtin.command: systemctl restart apache2
+      when: ansible_os_family == "Debian"
+
+    - name: Restart Apachge on RedHat
+      ansible.builtin.command: systemctl restart httpd
+      when: ansible_os_family == "RedHat"
 
 
 
 - hosts: db
   become: true
-  
+
   tasks:
-
-    - name: "Update Repository cache"
-      apt:
-        update_cache: true
-        cache_valid_time: 3600
-        force_apt_get: true
-
-    - name: Install MariaDB
-      apt:
+    - name: Install MariaDB on RedHat
+      dnf:
         name: mariadb-server
         state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Install MariaDB on Debian
+      apt:
+        name: mariadb-server, ufw
+        update_cache: true
+        state: present
+      when: ansible_os_family == "Debian"
 
     - name: Start and enable MariaDB
-      service: name=mariadb state=started enabled=true        
+      service: name=mariadb state=started enabled=true
 
-    - name: Adjust MariaDB connectivity
-      ansible.builtin.command: sudo sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/mysql/mariadb.conf.d/50-server.cnf
+    - name: Adjust MariaDB connectivity on RedHat
+      ansible.builtin.command: sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/my.cnf.d/mariadb-server.cnf
+      when: ansible_os_family == "RedHat"
+
+    - name: Adjust MariaDB connectivity on Debian
+      ansible.builtin.command: sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/mysql/mariadb.conf.d/50-server.cnf
+      when: ansible_os_family == "Debian"
 
     - name: Restart MariaDB
-      ansible.builtin.command: sudo systemctl restart mariadb
+      ansible.builtin.command: systemctl restart mariadb
 
     - name: Copy the db setup file
-      copy: src=db/ dest=/tmp/
+      copy: src=apps-data/app2-data/db/ dest=/tmp/
 
     - name: Load the DB
-      ansible.builtin.shell: sudo mysql -u root < /tmp/db_setup.sql
+      ansible.builtin.shell: mysql -u root < /tmp/db_setup.sql
 
     - name: Red Hat - Open HTTP Port in the Firewall
       firewalld:
@@ -111,3 +121,10 @@
         state: enabled
         immediate: true
       when: ansible_os_family == "RedHat"
+
+    - name: Debian - Open HTTP Port in the Firewall
+      ufw:
+        rule: allow
+        port: 3306
+        proto: tcp
+      when: ansible_os_family == "Debian"

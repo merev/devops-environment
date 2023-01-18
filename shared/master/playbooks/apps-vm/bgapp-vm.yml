@@ -5,6 +5,7 @@
   tasks:
     - name: Install PHP packets
       dnf: name=php,php-mysqlnd state=present
+      when: ansible_os_family == "RedHat"
 
     - name: Install Apache HTTP Server on Red Hat
       dnf: name=httpd state=present
@@ -22,6 +23,10 @@
         immediate: true
       when: ansible_os_family == "RedHat"
 
+    - name: Install PHP packets
+      apt: name=php,php-mysqlnd,ufw state=present update_cache=true
+      when: ansible_os_family == "Debian"
+
     - name: Install Apache HTTP Server on Debian
       apt: name=apache2 state=present
       when: ansible_os_family == "Debian"
@@ -31,40 +36,53 @@
       when: ansible_os_family == "Debian"
 
     - name: Debian - Open HTTP Port in the Firewall
-      ufw: 
+      ufw:
         rule: allow
         port: 80
         proto: tcp
       when: ansible_os_family == "Debian"
 
     - name: Copy the web content
-      copy: src=bgapp-data/web/ dest=/var/www/html/
+      copy: src=apps-data/bgapp-data/web/ dest=/var/www/html/
 
 
 
 - hosts: db
   become: true
-  
+
   tasks:
-    - name: Install MariaDB
+    - name: Install MariaDB on RedHat
       dnf:
         name: mariadb-server
         state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Install MariaDB on Debian
+      apt:
+        name: mariadb-server, ufw
+        update_cache: true
+        state: present
+      when: ansible_os_family == "Debian"
 
     - name: Start and enable MariaDB
-      service: name=mariadb state=started enabled=true        
+      service: name=mariadb state=started enabled=true
 
     - name: Adjust MariaDB connectivity
-      ansible.builtin.command: sudo sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/my.cnf.d/mariadb-server.cnf
+      ansible.builtin.command: sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/my.cnf.d/mariadb-server.cnf
+      when: ansible_os_family == "RedHat"
+
+    - name: Adjust MariaDB connectivity
+      ansible.builtin.command: sed -i.bak s/127.0.0.1/0.0.0.0/g /etc/mysql/mariadb.conf.d/50-server.cnf
+      when: ansible_os_family == "Debian"
 
     - name: Restart MariaDB
-      ansible.builtin.command: sudo systemctl restart mariadb
+      ansible.builtin.command: systemctl restart mariadb
 
     - name: Copy the db setup file
-      copy: src=bgapp-data/db/ dest=/tmp/
+      copy: src=apps-data/bgapp-data/db/ dest=/tmp/
 
     - name: Load the DB
-      ansible.builtin.shell: sudo mysql -u root < /tmp/db_setup.sql
+      ansible.builtin.shell: mysql -u root < /tmp/db_setup.sql
 
     - name: Red Hat - Open HTTP Port in the Firewall
       firewalld:
@@ -75,7 +93,7 @@
       when: ansible_os_family == "RedHat"
 
     - name: Debian - Open HTTP Port in the Firewall
-      ufw: 
+      ufw:
         rule: allow
         port: 3306
         proto: tcp

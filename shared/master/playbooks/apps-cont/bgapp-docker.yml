@@ -1,9 +1,10 @@
 ---
-- hosts: docker
+- hosts: apps
+  become: true
   tasks:
 
     - name: Instal docker module
-      ansible.builtin.command: sudo pip3 install docker
+      ansible.builtin.command: pip3 install docker
 
 #    - name: Clone bgapp project
 #      ansible.builtin.git:
