@@ -31,6 +31,3 @@ cat /home/vagrant/.ssh/id_rsa.pub | tee /shared/master/ansible-public-key.conf
 echo "* Create ansible workspace directory ..."
 mkdir -p /home/vagrant/ansible
 cp -r /shared/master/ansible-components/* /home/vagrant/ansible/
-mkdir -p /home/vagrant/ansible/bgapp-data
-cp -r /shared/master/bgapp-data/* /home/vagrant/ansible/bgapp-data
-cp -r /shared/master/playbooks/* /home/vagrant/ansible/
