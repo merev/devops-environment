@@ -21,3 +21,6 @@ You can find detailed information about the boxes that I have used here - https:
 The operating system installed on the hosts is Debian 11. Each VM has 2 GB RAM, 2 CPUs, and 60 GB disk space. The hardware parameters can be adjusted before provisioning in the `config.vm.provider` block of the Vagrantfile. The firewall is disabled. Every node has 2 network interfaces:
  - 1 NIC in NAT Mode - connected to the host machine;
  - 1 NIC in Host-Only Mode - connected to a separate virtual network for isolated communication between the VMs.
+
+## Setup
+Once the provision is completed, open the ***setup*** folder and follow the instructions described in the files.
