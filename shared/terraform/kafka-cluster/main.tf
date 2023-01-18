@@ -44,6 +44,7 @@ resource "docker_container" "con-zookeeper" {
     internal = "2181"
     external = "22181"
   }
+  restart = "always"
 }
 
 resource "docker_container" "con-broker" {
@@ -64,6 +65,7 @@ resource "docker_container" "con-broker" {
     internal = "9092"
     external = "9092"
   }
+  restart = "always"
 }
 
 resource "docker_container" "con-facts-consumer" {
@@ -73,6 +75,7 @@ resource "docker_container" "con-facts-consumer" {
   networks_advanced {
     name = docker_network.kafka-main-network.name
   }
+  restart = "always"
 }
 
 resource "docker_container" "con-facts-producer" {
@@ -82,4 +85,5 @@ resource "docker_container" "con-facts-producer" {
   networks_advanced {
     name = docker_network.kafka-main-network.name
   }
+  restart = "always"
 }

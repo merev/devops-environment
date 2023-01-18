@@ -69,6 +69,7 @@ Vagrant.configure("2") do |config|
     monitoring.vm.provision "shell", path: "initial-config/add_hosts.sh"
     monitoring.vm.provision "shell", path: "initial-config/ansible/ansible_debian_client.sh"
     monitoring.vm.provision "shell", path: "initial-config/monitoring/node_exp_setup.sh"
+    monitoring.vm.provision "shell", path: "initial-config/monitoring/prom_prep.sh"
     monitoring.vm.provision "shell", path: "initial-config/docker/docker_setup.sh"
   end
 

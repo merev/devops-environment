@@ -6,7 +6,7 @@ terraform {
   }
 }
 provider "docker" {
-  host = "tcp://192.168.99.102:2375/"
+  host = "tcp://192.168.99.104:2375/"
 }
 
 module "prometheus" {

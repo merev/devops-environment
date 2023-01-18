@@ -22,7 +22,7 @@ resource "docker_container" "con-prometheus" {
   }
   mounts {
     type = "bind"
-    source = "/home/vagrant/terraform-workdir/monitoring/prometheus.yml"
+    source = "/home/vagrant/prometheus/prometheus.yml"
     target = "/etc/prometheus/prometheus.yml"
   }
 }
