@@ -1,4 +1,4 @@
-# How to start our apps on the VMs running in the Application Namespace?
+# How to start our apps on the VMs running in the Applications Namespace?
 
 The applications can be started through the ansible playbooks in the following directories:
  - ***/home/vagrant/ansible/playbooks/apps-cont***
