@@ -1,0 +1,7 @@
+---
+- hosts: kafka
+  tasks:
+
+    - name: Start kafka exporter for monitoring purposes
+      ansible.builtin.shell:
+        cmd: docker container run -d --rm -p 9308:9308 --name kafka-exporter danielqsj/kafka-exporter --kafka.server=192.168.99.103:9092
