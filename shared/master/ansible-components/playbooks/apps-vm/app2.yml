@@ -9,7 +9,7 @@
       when: ansible_os_family == "RedHat"
 
     - name: Install Apache HTTP Server on Red Hat
-      apt: name=httpd state=present
+      dnf: name=httpd state=present
       when: ansible_os_family == "RedHat"
 
     - name: Start Apache HTTP Server and Enable it on Red Hat
