@@ -4,7 +4,7 @@ The applications can be started through the ansible playbooks in the following d
  - ***/home/vagrant/ansible/playbooks/apps-cont***
  - ***/home/vagrant/ansible/playbooks/apps-vm***
 
-### Execute some of the following commands if you want ot start any app (should be executed from the ansible working directory):
+### Execute some of the following commands if you want ot start any app (should be executed from the ansible working directory as root):
 
 Run BGApp in docker containers:
 
