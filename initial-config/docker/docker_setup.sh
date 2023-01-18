@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "* Add any prerequisites ..."
-apt-get update -y && apt-get install -y ca-certificates curl gnupg lsb-release git fontconfig openjdk-11-jre
+apt-get update -y && apt-get install -y ca-certificates curl gnupg lsb-release git fontconfig openjdk-11-jre python3 python3-pip
 
 echo "* Add Docker repository and key ..."
 curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
