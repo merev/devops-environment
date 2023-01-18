@@ -7,7 +7,7 @@ This is an automated solution for DevOps Environment created through Vagrant, Te
 
 #### Requirements:
 
- - Regular computar (Laptop or PC) with RAM 16+ GB, Disk: 80+ GB, and CPU: Intel/AMD x64 with virtualization support;
+ - Regular computer (Laptop or PC) with RAM 16+ GB, Disk: 80+ GB, and CPU: Intel/AMD x64 with virtualization support;
  - VirtualBox 6.1+:  https://www.virtualbox.org/wiki/Downloads;
  - Vagrant 2.1+:  https://developer.hashicorp.com/vagrant/downloads;
 
