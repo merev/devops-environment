@@ -7,7 +7,7 @@ You should start it by executing the following script as root from the terraform
 
 Command:
 
-    ./start-kafka.sh
+    bash start-kafka.sh
 
 ## Start kafka-exporter for monitoring purposes
 
