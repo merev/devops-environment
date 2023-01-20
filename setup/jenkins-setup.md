@@ -5,13 +5,13 @@
 
 Example command:
 
-    sudo ansible-playbook jenkins/change-jenkins-password.yml --extra-vars password=<your password>
+    sudo ansible-playbook playbooks/jenkins/change-jenkins-password.yml --extra-vars password=<your password>
 
 2.) Generate RSA public and private keys by applying the following ansible playbook - ***jenkins/ssh-key-gen.yml***
 
 Example command:
 
-    sudo ansible-playbook jenkins/ssh-key-gen.yml
+    sudo ansible-playbook playbooks/jenkins/ssh-key-gen.yml
 
 3.) Add SSH username with private key credential from the UI (use the key that was exported in `/shared/jenkins/ssh-keys/id_rsa`).
 
@@ -23,7 +23,7 @@ Modify the user 'jenkins' on the remote host by applying the following ansible p
 
 Example command:
 
-    sudo ansible-playbook jenkins/create-jenkins-user.yml --extra-vars password=<your password>
+    sudo ansible-playbook playbooks/jenkins/create-jenkins-user.yml --extra-vars password=<your password>
     
 ## Add the remote host as a slave node
 
@@ -31,8 +31,8 @@ Apply the following ansible playbook - ***jenkins/add-slave-node.yml*** (you sho
 
 Command:
 
-    sudo ansible-playbook jenkins/add-slave-node.yml --extra-vars nodename=<node hostname> --extra-vars credid=<credential ID> --extra-vars label=<node label>
+    sudo ansible-playbook playbooks/jenkins/add-slave-node.yml --extra-vars nodename=<node hostname> --extra-vars credid=<credential ID> --extra-vars label=<node label>
 
 Example:
 
-    sudo ansible-playbook jenkins/add-slave-node.yml --extra-vars nodename=docker --extra-vars credid=jenkins --extra-vars label=docker
+    sudo ansible-playbook playbooks/jenkins/add-slave-node.yml --extra-vars nodename=docker --extra-vars credid=jenkins --extra-vars label=docker
