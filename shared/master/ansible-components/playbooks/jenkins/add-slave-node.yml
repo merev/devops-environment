@@ -5,4 +5,4 @@
     
     -  name: Add slave node through a BASH script
        ansible.builtin.shell:
-         cmd: /shared/jenkins/add-jenkins-slave.sh "{{ nodename }}" "{{ credid }}" "{{ label }}"
+         cmd: bash /shared/jenkins/add-jenkins-slave.sh "{{ nodename }}" "{{ credid }}" "{{ label }}"
